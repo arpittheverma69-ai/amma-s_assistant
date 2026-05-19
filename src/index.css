@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --font-hindi: "Noto Sans Devanagari", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  
+  --color-brand-bg: #0c0800;
+  --color-brand-card: #201608;
+  --color-brand-saffron: #e8902e;
+  --color-brand-amber: #c8940c;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-brand-bg);
+  color: #fafaf9; /* stone-50 */
+}
+
+h1, h2, h3, h4, h5, h6, .font-hindi {
+  font-family: var(--font-hindi);
+}
+
+/* Hide scrollbar for clean look but keep functionality */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Animations */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(232, 144, 46, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(232, 144, 46, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 144, 46, 0); }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse-mic {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.animate-pulse-mic {
+  animation: pulse-mic 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
