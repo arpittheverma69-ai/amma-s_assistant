@@ -167,6 +167,7 @@ const SABZI_ROTATION = [
 export default function App() {
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('deepseek_api_key') || '');
   const [isSetupComplete, setIsSetupComplete] = useState(() => !!localStorage.getItem('deepseek_api_key'));
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // App States
@@ -194,9 +195,17 @@ export default function App() {
     }
   }, []);
 
-  // Auto-greet when setup is complete
+  // Audio Unlocker for Mobile
+  const unlockAudio = () => {
+    if (window.speechSynthesis) {
+      const utterance = new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Auto-greet when interaction is confirmed
   useEffect(() => {
-    if (isSetupComplete && messages.length === 0) {
+    if (hasInteracted && messages.length === 0) {
       setTimeout(() => {
         const greeting = "नमस्ते जी! आज आपने खाने में क्या-क्या खाया?";
         setMessages([{ role: "assistant", content: greeting }]);
@@ -208,7 +217,7 @@ export default function App() {
         }, 3000); 
       }, 500);
     }
-  }, [isSetupComplete]);
+  }, [hasInteracted]);
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -385,7 +394,9 @@ export default function App() {
               if(apiKey.trim()) {
                 localStorage.setItem('deepseek_api_key', apiKey.trim());
                 setApiKey(apiKey.trim());
+                unlockAudio();
                 setIsSetupComplete(true);
+                setHasInteracted(true);
               } 
             }}
             className="w-full bg-[var(--color-brand-saffron)] text-stone-900 font-bold py-3 rounded-xl hover:bg-[var(--color-brand-amber)] transition-colors text-lg"
@@ -393,6 +404,27 @@ export default function App() {
             शुरू करें
           </button>
         </div>
+      </div>
+    );
+  }
+
+  // Splash Screen for Returning Users (To Unlock Mobile Audio)
+  if (isSetupComplete && !hasInteracted) {
+    return (
+      <div className="min-h-screen bg-[var(--color-brand-bg)] flex flex-col items-center justify-center p-6 text-stone-50 font-hindi">
+        <div className="text-center animate-pulse-ring rounded-full p-8 mb-8">
+          <h1 className="text-6xl text-[var(--color-brand-saffron)] font-bold">सखी</h1>
+        </div>
+        <button 
+          onClick={() => {
+            unlockAudio();
+            setHasInteracted(true);
+          }}
+          className="bg-gradient-to-tr from-[var(--color-brand-saffron)] to-[var(--color-brand-amber)] text-[#0c0800] font-bold py-4 px-10 rounded-full hover:scale-105 transition-transform text-2xl shadow-[0_0_30px_rgba(232,144,46,0.3)]"
+        >
+          सखी से बात करें
+        </button>
+        <p className="mt-8 text-stone-400 text-sm">Tap to start voice assistant</p>
       </div>
     );
   }
