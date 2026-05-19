@@ -316,7 +316,7 @@ export default function App() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
+          "Authorization": `Bearer ${apiKey.trim()}`
         },
         body: JSON.stringify({
           model: "deepseek-chat",
@@ -382,8 +382,9 @@ export default function App() {
           />
           <button 
             onClick={() => { 
-              if(apiKey) {
-                localStorage.setItem('deepseek_api_key', apiKey);
+              if(apiKey.trim()) {
+                localStorage.setItem('deepseek_api_key', apiKey.trim());
+                setApiKey(apiKey.trim());
                 setIsSetupComplete(true);
               } 
             }}
